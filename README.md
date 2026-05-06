@@ -6,152 +6,156 @@
 <title>UrbanWear Store</title>
 
 <style>
-body {
-  font-family: Arial;
+* {
   margin: 0;
-  background: #f4f4f4;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI';
 }
 
-header {
-  background: #111;
+body {
+  background: #0f172a;
   color: white;
-  text-align: center;
-  padding: 15px;
-  font-size: 22px;
 }
 
-.container {
-  max-width: 1000px;
-  margin: auto;
+/* NAVBAR */
+nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background: rgba(0,0,0,0.5);
+}
+
+nav h1 {
+  color: #38bdf8;
+}
+
+nav span {
+  cursor: pointer;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.hero h2 {
+  font-size: 40px;
+}
+
+.hero p {
+  color: #94a3b8;
+}
+
+/* PRODUK */
+.products {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
   padding: 20px;
 }
 
-.products {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
-  gap: 20px;
-}
-
 .card {
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 15px;
+  width: 200px;
   text-align: center;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  transition: 0.3s;
 }
 
-.card img {
-  width: 100%;
-  border-radius: 10px;
+.card:hover {
+  transform: scale(1.05);
+  background: #334155;
+}
+
+.card h3 {
+  margin: 10px 0;
 }
 
 button {
-  padding: 10px;
+  background: #38bdf8;
   border: none;
-  background: black;
-  color: white;
+  padding: 8px;
   border-radius: 8px;
   cursor: pointer;
 }
 
-button:hover {
-  background: #444;
-}
-
+/* CART */
 .cart {
-  margin-top: 30px;
-  background: white;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 250px;
+  height: 100%;
+  background: #020617;
   padding: 20px;
-  border-radius: 10px;
 }
 
-input {
-  padding: 10px;
-  width: 100%;
-  margin-top: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
 </style>
 </head>
 
 <body>
 
-<header>🛍️ UrbanWear Store</header>
+<!-- NAVBAR -->
+<nav>
+  <h1>UrbanWear</h1>
+  <span onclick="toggleCart()">🛒 Cart</span>
+</nav>
 
-<div class="container">
+<!-- HERO -->
+<div class="hero">
+  <h2>Upgrade Your Style 🔥</h2>
+  <p>Fashion kekinian, tampil lebih percaya diri</p>
+</div>
 
-<h2>Daftar Produk</h2>
-
+<!-- PRODUK -->
 <div class="products">
 
 <div class="card">
-<img src="https://via.placeholder.com/200">
-<h3>Kaos Hitam</h3>
-<p>Rp 80.000</p>
-<button onclick="tambah('Kaos Hitam',80000)">Tambah</button>
+  <h3>Kaos Hitam</h3>
+  <p>Rp 80.000</p>
+  <button onclick="addCart('Kaos Hitam',80000)">Beli</button>
 </div>
 
 <div class="card">
-<img src="https://via.placeholder.com/200">
-<h3>Hoodie Abu</h3>
-<p>Rp 150.000</p>
-<button onclick="tambah('Hoodie Abu',150000)">Tambah</button>
+  <h3>Hoodie Street</h3>
+  <p>Rp 150.000</p>
+  <button onclick="addCart('Hoodie Street',150000)">Beli</button>
 </div>
 
 <div class="card">
-<img src="https://via.placeholder.com/200">
-<h3>Jaket Denim</h3>
-<p>Rp 200.000</p>
-<button onclick="tambah('Jaket Denim',200000)">Tambah</button>
+  <h3>Jaket Denim</h3>
+  <p>Rp 200.000</p>
+  <button onclick="addCart('Jaket Denim',200000)">Beli</button>
 </div>
 
 </div>
 
-<div class="cart">
-<h2>Keranjang</h2>
-<ul id="list"></ul>
-
-<p><b>Total: Rp <span id="total">0</span></b></p>
-
-<button onclick="hapus()">Hapus Semua</button>
-
-<h3>Checkout</h3>
-<input type="text" id="nama" placeholder="Nama Pembeli">
-<button onclick="checkout()">Checkout</button>
-
-</div>
-
+<!-- CART -->
+<div class="cart" id="cart" style="display:none;">
+  <h2>Keranjang</h2>
+  <ul id="list"></ul>
+  <p>Total: Rp <span id="total">0</span></p>
 </div>
 
 <script>
 let total = 0;
 
-function tambah(nama, harga){
+function addCart(nama, harga) {
   let li = document.createElement("li");
-  li.innerText = nama + " - Rp " + harga;
+  li.innerText = nama;
   document.getElementById("list").appendChild(li);
 
   total += harga;
   document.getElementById("total").innerText = total;
 }
 
-function hapus(){
-  document.getElementById("list").innerHTML = "";
-  total = 0;
-  document.getElementById("total").innerText = total;
-}
-
-function checkout(){
-  let nama = document.getElementById("nama").value;
-
-  if(nama === ""){
-    alert("Isi nama dulu!");
-  } else if(total === 0){
-    alert("Keranjang kosong!");
-  } else {
-    alert("Terima kasih " + nama + " sudah belanja!");
-  }
+function toggleCart() {
+  let cart = document.getElementById("cart");
+  cart.style.display = cart.style.display === "none" ? "block" : "none";
 }
 </script>
 
